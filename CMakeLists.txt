@@ -33,13 +33,14 @@ if (MSVC)
   add_compile_options(/utf-8)
 endif()
 
-find_package(SDL2 CONFIG REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 add_executable(Lab1 
   src/main.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
 ) 
