@@ -1,9 +1,12 @@
-#include <iostream>
-#include <string>
+#include <QApplication>
+#include "PaintWidget.h"
 
-int main(int argc, char* argv[])
-{
-	std::cout<<"Hello world";
 
-	return 0;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+
+    PaintWidget widget;
+    widget.show();
+
+    return app.exec();
 }
