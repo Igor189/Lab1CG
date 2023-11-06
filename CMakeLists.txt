@@ -11,6 +11,8 @@ project(Lab1
   LANGUAGES CXX
 )
 
+set(CMAKE_AUTOMOC ON)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -37,6 +39,10 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 add_executable(Lab1 
   src/main.cpp
+  src/BrushSettings.h
+  src/BrushSettings.cpp
+  src/PaintWidget.h
+  src/PaintWidget.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

@@ -1,19 +1,32 @@
 #include "PaintWidget.h"
 #include <QPainter>
+#include <QDesktopWidget>
 
 PaintWidget::PaintWidget()
 {
+    QDesktopWidget desktop;
+    QSize screenSize = desktop.screenGeometry().size();
     setAttribute(Qt::WA_StaticContents);
-    m_bIsModified = false;
     m_nPenWidth = 1;
     m_PenColor = Qt::black;
-    m_Image = QImage(800, 600, QImage::Format_RGB32);
-    m_Image.fill(qRgb(255, 255, 255));
+    m_Pixmap = QPixmap(screenSize);
+    m_Pixmap.fill(Qt::white);
+    setMinimumSize(640, 480);
+}
+
+void PaintWidget::SetPenWidth(int width)
+{
+    m_nPenWidth = width;
+}
+
+void PaintWidget::SetPenColor(const QColor& color)
+{
+    m_PenColor = color;
 }
 
 void PaintWidget::mousePressEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton) 
+    if (event->button() == Qt::LeftButton)
     {
         m_LastPoint = event->pos();
     }
@@ -27,7 +40,7 @@ void PaintWidget::mouseMoveEvent(QMouseEvent* event)
 
 void PaintWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton) 
+    if (event->button() == Qt::LeftButton)
     {
         DrawLineTo(event->pos());
     }
@@ -37,16 +50,15 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     QRect dirtyRect = event->rect();
-    painter.drawImage(dirtyRect, m_Image, dirtyRect);
+    painter.drawPixmap(dirtyRect, m_Pixmap, dirtyRect);
 }
 
 void PaintWidget::DrawLineTo(const QPoint& endPoint)
 {
-    QPainter painter(&m_Image);
+    QPainter painter(&m_Pixmap);
     painter.setPen(QPen(m_PenColor, m_nPenWidth, Qt::SolidLine, Qt::RoundCap,
         Qt::RoundJoin));
     painter.drawLine(m_LastPoint, endPoint);
-    m_bIsModified = true;
 
     int rad = (m_nPenWidth / 2) + 2;
     update(QRect(m_LastPoint, endPoint).normalized()
